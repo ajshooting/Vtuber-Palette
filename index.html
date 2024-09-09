@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カラーチャート</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            border: 1px solid #000;
+        }
+
+        #tooltip {
+            position: absolute;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border-radius: 5px;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="colorChart" width="700" height="700"></canvas>
+    <div id="tooltip"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
