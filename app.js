@@ -27,12 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CSVファイルからデータを読み込む
     async function loadCSVFiles() {
-        const files = ['./colordict/noripro.csv',
-            './colordict/774inc.csv',
-            './colordict/hololive.csv',
-            './colordict/vspo.csv',
-            './colordict/neoporte.csv',
-            './colordict/nijisanji.csv'];
+        const files = ['./colordict/のりプロ.csv',
+            './colordict/ななしいんく.csv',
+            './colordict/ホロライブ.csv',
+            './colordict/ぶいすぽっ!.csv',
+            './colordict/ネオポルテ.csv',
+            './colordict/にじさんじ.csv'];
         let data = [];
         for (const file of files) {
             const response = await fetch(file);
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // const x = Math.floor((rgb.r / 255) * width);
             // const y = Math.floor((rgb.g / 255) * height);
             const hsv = rgbToHsv(rgb);
-            const x = Math.floor(hsv.H * width * 1.2);
+            const x = Math.floor(hsv.H * width);
             // h-v平面にしたらいい感じ、逆対数スケールにして見やすくした
             // const y = Math.floor(hsv.V * height);
             const a = 4;
@@ -140,13 +140,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
             });
 
-            console.log({
-                x, y, name: item.name,
-                office: item.office,
-                colorCode: item.colorCode,
-                rgb: `r:${rgb.r} g:${rgb.g} b:${rgb.b}`,
-                hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
-            })
+            // console.log({
+            //     x, y, name: item.name,
+            //     office: item.office,
+            //     colorCode: item.colorCode,
+            //     rgb: `r:${rgb.r} g:${rgb.g} b:${rgb.b}`,
+            //     hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
+            // })
         });
     }
 
