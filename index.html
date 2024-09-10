@@ -4,19 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カラーチャート</title>
+    <title>Vtuber Palette</title>
     <style>
         body {
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
         }
 
         canvas {
             border: 1px solid #000;
+            max-width: 95%;
+            height: auto;
+        }
+
+        button {
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
         #tooltip {
@@ -28,12 +34,69 @@
             pointer-events: none;
             display: none;
         }
+
+        .info {
+            text-align: center;
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .search-container input {
+            width: 80%;
+            padding: 5px;
+            font-size: 16px;
+        }
     </style>
 </head>
 
 <body>
+    <div class="search-container">
+        <input type="text" placeholder="検索" id="query">
+        <button id="search">検索</button>
+    </div>
+
     <canvas id="colorChart" width="700" height="700"></canvas>
     <div id="tooltip"></div>
+
+    <div>
+        <select id="colorSpace">
+            <option value="rgb">RGB平面</option>
+            <option value="hsv" selected>HSV平面</option>
+        </select>
+        <select id="useAxis">
+            <option value="1-2" selected>R-G/H-S</option>
+            <option value="1-3">R-B/H-V</option>
+            <option value="2-3">G-B/S-V</option>
+        </select>
+        <select id="reverse">
+            <option value="default" selected>default</option>
+            <option value="reverse">軸反転</option>
+        </select>
+
+        <div>
+            <label><input type="checkbox"> トグル1</label>
+            <label><input type="checkbox"> トグル2</label>
+            <label><input type="checkbox"> トグル3</label>
+            <label><input type="checkbox"> トグル4</label>
+            <label><input type="checkbox"> トグル5</label>
+            <label><input type="checkbox"> トグル6</label>
+            <label><input type="checkbox"> トグル7</label>
+            <label><input type="checkbox"> トグル8</label>
+            <label><input type="checkbox"> トグル9</label>
+        </div>
+        <!-- 横に適応ボタン -->
+        <button id="adapt">適応</button>
+    </div>
+    <div class="info">
+        <p>名前: [名前]</p>
+        <p>事務所: [事務所]</p>
+    </div>
 
     <script src="app.js"></script>
 </body>
