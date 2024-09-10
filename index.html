@@ -16,8 +16,13 @@
 
         canvas {
             border: 1px solid #000;
-            max-width: 95%;
-            height: auto;
+        }
+
+        .container {
+            overflow-x: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         button {
@@ -52,6 +57,19 @@
             padding: 5px;
             font-size: 16px;
         }
+
+        .line {
+            position: absolute;
+            background-color: black;
+        }
+
+        .horizontal {
+            height: 1px;
+        }
+
+        .vertical {
+            width: 1px;
+        }
     </style>
 </head>
 
@@ -60,9 +78,12 @@
         <input type="text" placeholder="検索" id="query">
         <button id="search">検索</button>
     </div>
+    <div class="container">
+        <canvas id="colorChart" width="700" height="700"></canvas>
+        <div id="linesContainer"></div>
+        <div id="tooltip"></div>
+    </div>
 
-    <canvas id="colorChart" width="700" height="700"></canvas>
-    <div id="tooltip"></div>
 
     <div>
         <select id="colorSpace">
@@ -80,22 +101,20 @@
         </select>
 
         <div>
-            <label><input type="checkbox"> トグル1</label>
-            <label><input type="checkbox"> トグル2</label>
-            <label><input type="checkbox"> トグル3</label>
-            <label><input type="checkbox"> トグル4</label>
-            <label><input type="checkbox"> トグル5</label>
-            <label><input type="checkbox"> トグル6</label>
-            <label><input type="checkbox"> トグル7</label>
-            <label><input type="checkbox"> トグル8</label>
-            <label><input type="checkbox"> トグル9</label>
+            <label><input type="checkbox" checked id="nijiEN"> nijiEN</label>
+            <label><input type="checkbox" checked id="nijiIN"> nijiIN</label>
+            <label><input type="checkbox" checked id="Virtua"> Virtua</label>
+            <label><input type="checkbox" checked id="774"> ななし</label>
+            <label><input type="checkbox" checked id="niji"> にじ</label>
+            <label><input type="checkbox" checked id="neo"> ネオ</label>
+            <label><input type="checkbox" checked id="nori"> のり</label>
+            <label><input type="checkbox" checked id="vspo"> ぶい</label>
+            <label><input type="checkbox" checked id="holo"> ホロ</label>
         </div>
-        <!-- 横に適応ボタン -->
         <button id="adapt">適応</button>
     </div>
-    <div class="info">
-        <p>名前: [名前]</p>
-        <p>事務所: [事務所]</p>
+    <div id="info">
+
     </div>
 
     <script src="app.js"></script>

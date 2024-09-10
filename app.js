@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const tooltip = document.getElementById('tooltip');
     const width = canvas.width;
     const height = canvas.height;
-    const points = [];
+    let points = [];
 
     let colorSpace = "hsv";
     let useAxis = "1-2";
@@ -152,17 +152,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // CSVファイルからデータを読み込む
     async function loadCSVFiles() {
-        const files = ['./colordict/のりプロ.csv',
-            './colordict/ななしいんく.csv',
-            './colordict/ホロライブ.csv',
-            './colordict/ぶいすぽっ!.csv',
-            './colordict/ネオポルテ.csv',
-            './colordict/にじさんじ.csv',
-            './colordict/NIJISANJI IN.csv',
-            './colordict/NIJISANJI EN.csv',
-            './colordict/VirtuaReal.csv'];
+        let readFiles = []
+        const files = {
+            'nijiEN': './colordict/NIJISANJI EN.csv',
+            'nijiIN': './colordict/NIJISANJI IN.csv',
+            'Virtua': './colordict/VirtuaReal.csv',
+            '774': './colordict/ななしいんく.csv',
+            'niji': './colordict/にじさんじ.csv',
+            'neo': './colordict/ネオポルテ.csv',
+            'nori': './colordict/のりプロ.csv',
+            'vspo': './colordict/ぶいすぽっ!.csv',
+            'holo': './colordict/ホロライブ.csv'
+        };
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                readFiles.push(files[checkbox.id])
+            }
+        });
+
         let data = [];
-        for (const file of files) {
+        for (const file of readFiles) {
             const response = await fetch(file);
             const text = await response.text();
             const rows = text.trim().split('\n');
@@ -265,16 +276,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 rgb: `r:${rgb.r} g:${rgb.g} b:${rgb.b}`,
                 hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
             });
-
-            // console.log({
-            //     x, y, name: item.name,
-            //     office: item.office,
-            //     colorCode: item.colorCode,
-            //     rgb: `r:${rgb.r} g:${rgb.g} b:${rgb.b}`,
-            //     hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
-            // })
         });
     }
+
 
     // マウス移動時にツールチップを表示
     canvas.addEventListener('mousemove', function (event) {
@@ -303,30 +307,62 @@ document.addEventListener("DOMContentLoaded", function () {
     // 検索
     function searchV() {
         const query = document.getElementById("query").value;
-        const canvas = document.getElementById('colorChart');
+        const linesContainer = document.getElementById('linesContainer');
         if (query == "") return;
-        const results = points.filter(point => point.name.toLowerCase().includes(query));
 
-        // 横線
-        function drawHorizontalLine(y) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
+        // 最初に全部消す！
+        while (linesContainer.firstChild) {
+            linesContainer.removeChild(linesContainer.firstChild);
         }
 
-        // 縦線
-        function drawVerticalLine(x) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
+        const results = points.filter(point =>
+            Object.values(point).some(value =>
+                value.toString().toLowerCase().includes(query.toLowerCase())
+            )
+        );
+
+        showInfo(results)
+        // console.log(results);
+
+        function addLine(x, y, isHorizontal) {
+            const canvas = document.getElementById('colorChart');
+            const rect = canvas.getBoundingClientRect();
+            const line = document.createElement('div');
+            line.classList.add('line');
+            if (isHorizontal) {
+                line.classList.add('horizontal');
+                line.style.width = `${width + 1}px`;
+                line.style.top = (rect.top + y + 1) + 'px';
+                line.style.left = rect.left + 'px';
+            } else {
+                line.classList.add('vertical');
+                line.style.height = `${height + 1}px`;
+                line.style.left = (rect.left + x + 1) + 'px';
+                line.style.top = rect.top + 'px';
+            }
+            document.getElementById('linesContainer').appendChild(line);
         }
 
-        console.log(results[0]);
+        addLine(0, results[0].y, true)
+        addLine(results[0].x, 0, false)
+    }
 
-        drawHorizontalLine(results[0].y);
-        drawVerticalLine(results[0].x);
+
+    function showInfo(results) {
+        const infoElement = document.getElementById('info');
+
+        // 最初に全部消す！
+        while (infoElement.firstChild) {
+            infoElement.removeChild(infoElement.firstChild);
+        }
+
+        results.forEach(item => {
+            const infoLine = document.createElement('div');
+            infoLine.textContent = `x: ${item.x}, y: ${item.y}, name: ${item.name}, office: ${item.office}, colorCode: ${item.colorCode}, ${item.rgb}, ${item.hsv}`;
+            infoElement.appendChild(infoLine);
+        });
+
+
     }
 
 
@@ -334,9 +370,11 @@ document.addEventListener("DOMContentLoaded", function () {
     drawColorChart()
     plotData();
 
+
     // 適応！
     const adaptElement = document.getElementById("adapt");
     adaptElement.addEventListener("click", function () {
+        points = [];
         loadSettings()
         drawColorChart()
         plotData();
@@ -345,6 +383,3 @@ document.addEventListener("DOMContentLoaded", function () {
     // 検索！
     document.getElementById("search").addEventListener("click", searchV);
 });
-
-// 軸変えれるように
-// 事務所絞り
