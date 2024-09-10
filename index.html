@@ -16,13 +16,7 @@
 
         canvas {
             border: 1px solid #000;
-        }
-
-        .container {
-            overflow-x: auto;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            max-width: 100%;
         }
 
         button {
@@ -78,11 +72,11 @@
         <input type="text" placeholder="検索" id="query">
         <button id="search">検索</button>
     </div>
-    <div class="container">
-        <canvas id="colorChart" width="700" height="700"></canvas>
-        <div id="linesContainer"></div>
-        <div id="tooltip"></div>
-    </div>
+
+    <canvas id="colorChart" width="700" height="700"></canvas>
+    <div id="linesContainer"></div>
+    <div id="tooltip"></div>
+
 
     <div>
         <select id="colorSpace">
