@@ -4,11 +4,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const tooltip = document.getElementById('tooltip');
     const width = canvas.width;
     const height = canvas.height;
+    const real_width = canvas.getBoundingClientRect().width;
+    const real_height = canvas.getBoundingClientRect().height;
     let points = [];
 
     let colorSpace = "hsv";
     let useAxis = "1-2";
     let reverse = "default";
+
+
+    function toRealPixel(num) {
+        return num * real_height / height
+    }
 
 
     function loadSettings() {
@@ -288,10 +295,24 @@ document.addEventListener("DOMContentLoaded", function () {
         let found = false;
 
         points.forEach(point => {
-            const distance = Math.sqrt((mouseX - point.x) ** 2 + (mouseY - point.y) ** 2);
-            if (distance < 5) { // 5ピクセル以内でヒットとみなす
-                tooltip.style.left = `${event.pageX + 10}px`;
-                tooltip.style.top = `${event.pageY + 10}px`;
+            if (Math.abs(mouseX - toRealPixel(point.x)) < toRealPixel(5) && Math.abs(mouseY - toRealPixel(point.y)) < toRealPixel(5)) { // 5ピクセル以内でヒットとみなす
+                const tooltipWidth = tooltip.offsetWidth;
+                const tooltipHeight = tooltip.offsetHeight;
+                const pageWidth = window.innerWidth;
+                const pageHeight = window.innerHeight;
+
+                let tooltipX = event.pageX + 10;
+                let tooltipY = event.pageY + 10;
+
+                if (tooltipX + tooltipWidth > pageWidth) {
+                    tooltipX = event.pageX - tooltipWidth - 10;
+                }
+                if (tooltipY + tooltipHeight > pageHeight) {
+                    tooltipY = event.pageY - tooltipHeight - 10;
+                }
+
+                tooltip.style.left = `${tooltipX}px`;
+                tooltip.style.top = `${tooltipY}px`;
                 tooltip.innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`;
                 tooltip.style.display = 'block';
                 found = true;
@@ -331,13 +352,13 @@ document.addEventListener("DOMContentLoaded", function () {
             line.classList.add('line');
             if (isHorizontal) {
                 line.classList.add('horizontal');
-                line.style.width = `${width + 1}px`;
-                line.style.top = (rect.top + y + 1) + 'px';
+                line.style.width = `${real_width}px`;
+                line.style.top = (rect.top + toRealPixel(y)) + 'px';
                 line.style.left = rect.left + 'px';
             } else {
                 line.classList.add('vertical');
-                line.style.height = `${height + 1}px`;
-                line.style.left = (rect.left + x + 1) + 'px';
+                line.style.height = `${real_height}px`;
+                line.style.left = (rect.left + toRealPixel(x)) + 'px';
                 line.style.top = rect.top + 'px';
             }
             document.getElementById('linesContainer').appendChild(line);
