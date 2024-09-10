@@ -361,8 +361,6 @@ document.addEventListener("DOMContentLoaded", function () {
             infoLine.textContent = `x: ${item.x}, y: ${item.y}, name: ${item.name}, office: ${item.office}, colorCode: ${item.colorCode}, ${item.rgb}, ${item.hsv}`;
             infoElement.appendChild(infoLine);
         });
-
-
     }
 
 
