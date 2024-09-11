@@ -163,7 +163,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const files = {
             'nijiEN': './colordict/NIJISANJI EN.csv',
             'nijiIN': './colordict/NIJISANJI IN.csv',
+            'VEE': './colordict/VEE.csv',
             'Virtua': './colordict/VirtuaReal.csv',
+            'dot': './colordict/どっとライブ.csv',
             '774': './colordict/ななしいんく.csv',
             'niji': './colordict/にじさんじ.csv',
             'neo': './colordict/ネオポルテ.csv',
@@ -284,6 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 hsv: `h:${hsv.H.toFixed(4)} s:${hsv.S.toFixed(4)} v:${hsv.V.toFixed(4)}`
             });
         });
+        console.log(`loaded ${points.length} points`)
     }
 
 
