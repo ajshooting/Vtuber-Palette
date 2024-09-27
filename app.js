@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
             'nijiIN': './colordict/NIJISANJI IN.csv',
             'VEE': './colordict/VEE.csv',
             'Virtua': './colordict/VirtuaReal.csv',
+            'aogiri': './colordict/あおぎり高校.csv',
             'dot': './colordict/どっとライブ.csv',
             '774': './colordict/ななしいんく.csv',
             'niji': './colordict/にじさんじ.csv',
@@ -404,4 +405,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 検索！
     document.getElementById("search").addEventListener("click", searchV);
+
+
+    // 二本指拡大禁止
+    document.addEventListener('touchmove', function (e) {
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // ダブルタップズーム禁止
+    document.addEventListener("dblclick", function (e) { e.preventDefault(); }, { passive: false });
+
 });
