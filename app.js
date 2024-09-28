@@ -58,20 +58,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             imageData.data[index + 2] = g;
                             imageData.data[index + 3] = a;
                         } else {
-                            imageData.data[index] = g;
-                            imageData.data[index + 1] = b;
-                            imageData.data[index + 2] = r;
+                            imageData.data[index] = b;
+                            imageData.data[index + 1] = r;
+                            imageData.data[index + 2] = g;
                             imageData.data[index + 3] = a;
                         }
                     } else {
                         if (reverse == "default") {
                             imageData.data[index] = b;
-                            imageData.data[index + 1] = r;
-                            imageData.data[index + 2] = g;
+                            imageData.data[index + 1] = g;
+                            imageData.data[index + 2] = r;
                             imageData.data[index + 3] = a;
                         } else {
-                            imageData.data[index] = b;
-                            imageData.data[index + 1] = g;
+                            imageData.data[index] = g;
+                            imageData.data[index + 1] = b;
                             imageData.data[index + 2] = r;
                             imageData.data[index + 3] = a;
                         }
@@ -329,6 +329,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
+    // クリック時の処理
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        // クリックされた点を特定
+        points.forEach(point => {
+            const distance = Math.sqrt((clickX - point.x) ** 2 + (clickY - point.y) ** 2);
+            if (distance < 5) {
+                document.getElementById('colorSample').style.backgroundColor = point.colorCode
+                document.getElementById('descriptionBox').innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`
+            }
+        });
+    });
+
+
     // 検索
     function searchV() {
         const query = document.getElementById("query").value;
@@ -370,6 +387,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         addLine(0, results[0].y, true)
         addLine(results[0].x, 0, false)
+
+        document.getElementById('colorSample').style.backgroundColor = results[0].colorCode
+        document.getElementById('descriptionBox').innerHTML = `${results[0].name}<br>${results[0].office}<br>${results[0].colorCode}<br>${results[0].rgb}<br>${results[0].hsv}`
     }
 
 
@@ -405,6 +425,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 検索！
     document.getElementById("search").addEventListener("click", searchV);
+
+
+    // 全選択
+    document.getElementById('checkAll').addEventListener('click', function () {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => checkbox.checked = true);
+    });
+    // 全選択解除
+    document.getElementById('uncheckAll').addEventListener('click', function () {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+    });
 
 
     // 二本指拡大禁止

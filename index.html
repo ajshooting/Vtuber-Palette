@@ -34,6 +34,47 @@
             display: none;
         }
 
+        .color-sample-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-sample {
+            border: 1px solid #000;
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            margin: 3px;
+        }
+
+        .description-box {
+            border: 1px solid #000;
+            padding: 2px;
+            min-width: 200px;
+            width: auto;
+            line-height: 1.2em;
+            height: calc(1.2em * 5);
+            text-align: center;
+            margin: 3px;
+        }
+
+        @media (min-width: 768px) {
+            .color-sample-container {
+                flex-direction: column;
+                align-items: flex-start;
+                position: fixed;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            #colorChart {
+                margin-left: 100px;
+            }
+        }
+
         .info {
             text-align: center;
         }
@@ -73,6 +114,12 @@
         <button id="search">検索</button>
     </div>
 
+
+    <div class="color-sample-container">
+        <div class="color-sample" id="colorSample"></div>
+        <div class="description-box" id="descriptionBox"></div>
+    </div>
+
     <canvas id="colorChart" width="700" height="700"></canvas>
     <div id="linesContainer"></div>
     <div id="tooltip"></div>
@@ -107,6 +154,8 @@
             <label><input type="checkbox" checked id="vspo"> ぶいすぽっ!</label><br>
             <label><input type="checkbox" checked id="holo"> ホロライブ</label><br>
         </div>
+        <button id="checkAll">すべて選択</button>
+        <button id="uncheckAll">すべて選択解除</button>
         <button id="adapt">適応</button>
     </div>
     <div id="info">
