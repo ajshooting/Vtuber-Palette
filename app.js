@@ -423,6 +423,7 @@ document.addEventListener("DOMContentLoaded", function () {
         plotData();
     });
 
+
     // 検索！
     document.getElementById("search").addEventListener("click", searchV);
 
@@ -445,6 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
         }
     }, { passive: false });
+
 
     // ダブルタップズーム禁止
     document.addEventListener("dblclick", function (e) { e.preventDefault(); }, { passive: false });
