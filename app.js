@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
             'nijiIN': './colordict/NIJISANJI IN.csv',
             'VEE': './colordict/VEE.csv',
             'Virtua': './colordict/VirtuaReal.csv',
+            'VOMS': './colordict/VOMS.csv',
             'aogiri': './colordict/あおぎり高校.csv',
             'dot': './colordict/どっとライブ.csv',
             '774': './colordict/ななしいんく.csv',
@@ -172,7 +173,9 @@ document.addEventListener("DOMContentLoaded", function () {
             'neo': './colordict/ネオポルテ.csv',
             'nori': './colordict/のりプロ.csv',
             'vspo': './colordict/ぶいすぽっ!.csv',
-            'holo': './colordict/ホロライブ.csv'
+            'holos': './colordict/ホロスターズ.csv',
+            'holo': './colordict/ホロライブ.csv',
+            'mochi': './colordict/元もちぷろ.csv'
         };
 
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
