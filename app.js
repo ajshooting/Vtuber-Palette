@@ -443,6 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => checkbox.checked = true);
     });
+
     // 全選択解除
     document.getElementById('uncheckAll').addEventListener('click', function () {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
