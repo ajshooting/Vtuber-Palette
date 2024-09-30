@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 tooltip.style.left = `${tooltipX}px`;
                 tooltip.style.top = `${tooltipY}px`;
-                tooltip.innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`;
+                tooltip.innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}<br>${tooltipX},${tooltipY}`;
                 tooltip.style.display = 'block';
                 found = true;
             }
@@ -332,21 +332,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // クリック時の処理
-    canvas.addEventListener('click', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const clickY = e.clientY - rect.top;
 
-        // クリックされた点を特定
+    // クリック・タッチ時の処理
+    const handleEvent = (e) => {
+        e.preventDefault(); // デフォルトのタッチ動作を防ぐ
+        const canvas = document.getElementById('colorChart');
+        const rect = canvas.getBoundingClientRect();
+        const clickX = (e.clientX || e.touches[0].clientX) - rect.left;
+        const clickY = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        // クリックまたはタップされた点を特定
         points.forEach(point => {
-            const distance = Math.sqrt((clickX - point.x) ** 2 + (clickY - point.y) ** 2);
-            if (distance < 5) {
-                document.getElementById('colorSample').style.backgroundColor = point.colorCode
-                document.getElementById('descriptionBox').innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`
+            const distance = Math.sqrt((clickX - toRealPixel(point.x)) ** 2 + (clickY - toRealPixel(point.y)) ** 2);
+            if (distance < toRealPixel(5)) {
+                document.getElementById('colorSample').style.backgroundColor = point.colorCode;
+                document.getElementById('descriptionBox').innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`;
             }
         });
-    });
+    };
+
+    canvas.addEventListener('click', handleEvent);
+    canvas.addEventListener('touchstart', handleEvent);
+
 
 
     // 検索
