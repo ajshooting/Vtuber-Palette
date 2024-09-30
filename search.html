@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>search Vtuber</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .color-box {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* footer */
+        .site-footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .footer-content a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Search Vtuber by color</h2>
+
+    <div>
+        <label><input type="checkbox" checked id="nijiEN"> NIJISANJI EN</label><br>
+        <label><input type="checkbox" checked id="nijiIN"> NIJISANJI IN</label><br>
+        <label><input type="checkbox" checked id="VEE"> VEE</label><br>
+        <label><input type="checkbox" checked id="Virtua"> VirtuaReal</label><br>
+        <label><input type="checkbox" checked id="VOMS"> VOMS</label><br>
+        <label><input type="checkbox" checked id="aogiri"> あおぎり高校</label><br>
+        <label><input type="checkbox" checked id="dot"> どっとライブ</label><br>
+        <label><input type="checkbox" checked id="774"> ななしいんく</label><br>
+        <label><input type="checkbox" checked id="niji"> にじさんじ</label><br>
+        <label><input type="checkbox" checked id="neo"> ネオポルテ</label><br>
+        <label><input type="checkbox" checked id="nori"> のりプロ</label><br>
+        <label><input type="checkbox" checked id="vspo"> ぶいすぽっ!</label><br>
+        <label><input type="checkbox" checked id="holos"> ホロスターズ</label><br>
+        <label><input type="checkbox" checked id="holo"> ホロライブ</label><br>
+        <label><input type="checkbox" checked id="mochi"> 元もちぷろ</label><br>
+    </div>
+    <button id="checkAll">すべて選択</button>
+    <button id="uncheckAll">すべて選択解除</button>
+    <br>
+    <br>
+    <input type="text" id="colorInput" placeholder="RGB or Hex">
+    <button id="findButton">Find Colors</button>
+    <div id="colorList"></div>
+
+
+    <!-- footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <a href="https://twitter.com/ajshooting" target="_blank">Twitter</a> |
+            <a href="https://github.com/ajshooting/Vtuber_Palette" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+    <script src="search.js"></script>
+</body>
+
+</html>
