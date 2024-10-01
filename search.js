@@ -72,8 +72,11 @@ async function findClosestColors() {
     console.log('Input Color:', inputColor);
     console.log('RGB Input:', rgbInput);
 
+    // HEXで処理するのかRGBで処理するのかしっかりしろよ！！
+    const inputColorHEX = inputColor.startsWith('#') ? inputColor : "#" + ((1 << 24) + (rgbInput[0] << 16) + (rgbInput[1] << 8) + rgbInput[2]).toString(16).slice(1).toUpperCase();
+
     // 入力したカラーをデータの先頭に追加
-    data.unshift({ name: 'Input Color', colorCode: inputColor, office: 'User Input' });
+    data.unshift({ name: 'Input Color', colorCode: inputColorHEX, office: 'User Input' });
 
     data.sort((a, b) => {
         const colorA = hexToRgb(a.colorCode);
@@ -83,7 +86,7 @@ async function findClosestColors() {
 
     const colorList = document.getElementById('colorList');
     colorList.innerHTML = '';
-    for (let i = 0; i < 30 && i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         const colorItem = data[i];
         const colorRow = document.createElement('div');
         colorRow.className = 'color-row';

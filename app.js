@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 tooltip.style.left = `${tooltipX}px`;
                 tooltip.style.top = `${tooltipY}px`;
-                tooltip.innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}<br>${tooltipX},${tooltipY}`;
+                tooltip.innerHTML = `${point.name}<br>${point.office}<br>${point.colorCode}<br>${point.rgb}<br>${point.hsv}`;
                 tooltip.style.display = 'block';
                 found = true;
             }
