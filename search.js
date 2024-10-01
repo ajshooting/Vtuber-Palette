@@ -86,7 +86,7 @@ async function findClosestColors() {
 
     const colorList = document.getElementById('colorList');
     colorList.innerHTML = '';
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0; i < 50 && i < data.length; i++) {
         const colorItem = data[i];
         const colorRow = document.createElement('div');
         colorRow.className = 'color-row';
