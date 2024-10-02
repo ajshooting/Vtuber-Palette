@@ -12,9 +12,15 @@ Vtuberのイメージカラーの分布を表示します。
 
 <img width="350" alt="image_1" src="https://github.com/user-attachments/assets/c4558618-6ae0-4e53-a8fe-7ea6392640cf">  
 
+<br>  
+
 <img width="250" alt="image_1" src="https://github.com/user-attachments/assets/141d6d45-ba4d-4c2e-92df-66a7c3f1aa32">  
 
+<br>  
+
 <img width="300" alt="スクリーンショット 2024-10-01 23 36 54" src="https://github.com/user-attachments/assets/7ac806fb-bb30-4d5a-8c02-a5fe85b66e07">  
+
+<br>
 
 ### その他
 カラーコード一覧は [./colordict](https://github.com/ajshooting/Vtuber_Palette/tree/main/colordict) を参照してください。  
