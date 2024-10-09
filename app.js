@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     y = Math.floor(hsv.S * height);
                 } else if (useAxis == "1-3") {
                     x = Math.floor(hsv.H * width);
-                    h - v平面にするなら逆対数スケールにする
+                    // h - v平面にするなら逆対数スケールにする
                     const a = 4;
                     y = Math.floor(Math.exp(hsv.V * a) / Math.exp(a) * height);
                 } else {

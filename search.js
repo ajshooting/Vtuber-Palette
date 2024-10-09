@@ -35,8 +35,12 @@ async function loadCSVFiles() {
             if (row.trim().startsWith('#')) continue;
             const columns = row.split(',');
             const name = columns[0].trim();
-            const colorCode = columns[1] ? columns[1].trim() : '';
-            if (!colorCode.trim().startsWith('#')) continue;
+            let colorCode = '';
+            if (columns[1] && columns[1].trim().startsWith('#')) {
+                colorCode = columns[1].trim()
+            } else if (columns[2] && columns[2].trim().startsWith('#')) {
+                colorCode = columns[2].trim()
+            }
             data.push({ name: name.trim(), colorCode: colorCode.trim(), office: file.split('/').pop().replace('.csv', '') });
         }
     }
