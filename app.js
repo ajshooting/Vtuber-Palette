@@ -195,8 +195,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (row.trim().startsWith('#')) continue;
                 const columns = row.split(',');
                 const name = columns[0].trim();
-                const colorCode = columns[1] ? columns[1].trim() : '';
-                if (!colorCode.trim().startsWith('#')) continue;
+                let colorCode = '';
+                if (columns[1] && columns[1].trim().startsWith('#')){
+                    colorCode = columns[1].trim()
+                } else if (columns[2] && columns[2].trim().startsWith('#')){
+                    colorCode = columns[2].trim()
+                }
                 data.push({ name: name.trim(), colorCode: colorCode.trim(), office: file.split('/').pop().replace('.csv', '') });
             }
         }
@@ -335,7 +339,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // クリック・タッチ時の処理
     const handleEvent = (e) => {
-        e.preventDefault(); // デフォルトのタッチ動作を防ぐ
         const canvas = document.getElementById('colorChart');
         const rect = canvas.getBoundingClientRect();
         const clickX = (e.clientX || e.touches[0].clientX) - rect.left;
