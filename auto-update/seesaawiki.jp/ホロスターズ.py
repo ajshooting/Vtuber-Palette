@@ -21,8 +21,6 @@ for row in rows:
         color_code = cols[2].text.strip()
         data.append([name, color_code])
 
-print(data)
-
 # 指定CSVファイルを開く
 csv_file = "colordict/ホロスターズ.csv"
 existing_data = []
