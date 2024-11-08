@@ -26,7 +26,7 @@ jobs:
 
             - name: Run update scripts
               run: |
-                  for script in auto-update/*/*.py; do
+                  for script in ./auto-update/*/*.py; do
                       python "$script"
                   done
 
