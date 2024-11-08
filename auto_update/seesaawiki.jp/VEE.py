@@ -3,25 +3,26 @@ from bs4 import BeautifulSoup
 import csv
 
 # URL
-url = "https://vtuberinfo.net/774inc-membercolor/"
+url = "https://vee.memo.wiki/d/%a5%a2%a5%a4%a5%b3%a5%f3%a5%c6%a5%f3%a5%d7%a5%ec%a1%bc%a5%c8%a1%a6%a5%ab%a5%e9%a1%bc%a5%b3%a1%bc%a5%c9%a4%de%a4%c8%a4%e1"
 
 # ソース取得
 response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
 
 # 表を抽出
-table = soup.find("table")
+table = soup.find_all("table")[0]
 rows = table.find_all("tr")
 data = []
 for row in rows:
     cols = row.find_all("td")
-    if len(cols) >= 2:
+    if len(cols) >= 1:
         name = cols[0].text.strip()
         color_code = cols[1].text.strip()
+        color_code2 = cols[2].text.strip()
         data.append([name, color_code])
 
 # 指定CSVファイルを開く
-csv_file = "colordict/ななしいんく.csv"
+csv_file = "colordict/VEE.csv"
 existing_data = []
 with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
     reader = csv.reader(file)

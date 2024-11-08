@@ -3,14 +3,14 @@ from bs4 import BeautifulSoup
 import csv
 
 # URL
-url = "https://vtuberinfo.net/774inc-membercolor/"
+url = "https://seesaawiki.jp/siroyoutuber/d/%c1%e1%b8%ab%c9%bd"
 
 # ソース取得
 response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
 
 # 表を抽出
-table = soup.find("table")
+table = soup.find_all("table")[109]
 rows = table.find_all("tr")
 data = []
 for row in rows:
@@ -21,7 +21,7 @@ for row in rows:
         data.append([name, color_code])
 
 # 指定CSVファイルを開く
-csv_file = "colordict/ななしいんく.csv"
+csv_file = "colordict/どっとライブ.csv"
 existing_data = []
 with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
     reader = csv.reader(file)

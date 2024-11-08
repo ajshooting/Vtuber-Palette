@@ -18,7 +18,7 @@ for row in rows:
     if len(cols) >= 2:
         name = cols[0].text.strip()
         color_code = cols[1].text.strip()
-        data.append((name, color_code))
+        data.append([name, color_code])
 
 # 指定CSVファイルを開く
 csv_file = "colordict/ホロライブ.csv"
@@ -27,7 +27,7 @@ with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
     reader = csv.reader(file)
     for row in reader:
         if len(row) >= 2 and not row[0].startswith("#"):
-            existing_data.append((row[0], row[1]))
+            existing_data.append([row[0], row[1]])
 
 # 差分を確認し、存在しない名前とカラーコードを追加
 new_entries = [entry for entry in data if entry not in existing_data]
