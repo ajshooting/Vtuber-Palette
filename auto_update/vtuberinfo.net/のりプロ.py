@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-from datetime import datetime
 
 # URL
 url = "https://vtuberinfo.net/noripro-membercolor/"
@@ -37,7 +36,6 @@ if new_entries:
     with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([])
-        writer.writerow([f'# {datetime.now().strftime("%Y-%m-%d")}'])
         for entry in new_entries:
             name, color_code = entry
             writer.writerow([name, color_code])
