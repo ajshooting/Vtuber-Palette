@@ -3,7 +3,7 @@ name: Update CSV
 on:
     schedule:
         - cron: '0 0 * * *' # 毎日実行
-    workflow_dispatch: # 手動実行のトリガーを追加
+    workflow_dispatch: # 手動実行
 
 jobs:
     update-csv:
