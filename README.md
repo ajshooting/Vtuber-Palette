@@ -1,7 +1,7 @@
 # Vtuber-Pallete
 Vtuberのイメージカラーの分布を表示します。  
 色分布を2次元でどう表せばいいかよくわからないまま作成してしまったのでツッコミどころは多いかもしれません。  
-[https://ajshooting.github.io/Vtuber-Palette/](ajshooting.github.io/Vtuber-Palette/)  
+[https://ajshooting.github.io/Vtuber-Palette/](https://ajshooting.github.io/Vtuber-Palette/)  
 
 ### 機能一覧
 - Vtuberのイメージカラー分布を表示
