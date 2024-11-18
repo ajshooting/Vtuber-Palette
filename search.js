@@ -40,6 +40,8 @@ async function loadCSVFiles() {
                 colorCode = columns[1].trim()
             } else if (columns[2] && columns[2].trim().startsWith('#')) {
                 colorCode = columns[2].trim()
+            } else {
+                continue;
             }
             data.push({ name: name.trim(), colorCode: colorCode.trim(), office: file.split('/').pop().replace('.csv', '') });
         }

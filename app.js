@@ -196,10 +196,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const columns = row.split(',');
                 const name = columns[0].trim();
                 let colorCode = '';
-                if (columns[1] && columns[1].trim().startsWith('#')){
+                if (columns[1] && columns[1].trim().startsWith('#')) {
                     colorCode = columns[1].trim()
-                } else if (columns[2] && columns[2].trim().startsWith('#')){
+                } else if (columns[2] && columns[2].trim().startsWith('#')) {
                     colorCode = columns[2].trim()
+                } else {
+                    continue;
                 }
                 data.push({ name: name.trim(), colorCode: colorCode.trim(), office: file.split('/').pop().replace('.csv', '') });
             }
