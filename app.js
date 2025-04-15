@@ -245,8 +245,8 @@ document.addEventListener("DOMContentLoaded", function () {
         data.forEach(item => {
             const rgb = hexToRgb(item.colorCode);
             const hsv = rgbToHsv(rgb);
-            let x;
-            let y;
+            let x, y;
+
             if (colorSpace == "rgb") {
                 if (useAxis == "1-2") {
                     x = Math.floor((rgb.r / 255) * width);
@@ -261,24 +261,28 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 // HSV平面
                 if (useAxis == "1-2") { // H-S
-                    x = Math.floor(hsv.H * width);
-                    y = Math.floor(hsv.S * height);
+                    if (reverse === "default") {
+                        x = Math.floor(hsv.H * width);
+                        y = Math.floor(hsv.S * height);
+                    } else { // S-H
+                        x = Math.floor(hsv.S * width);
+                        y = Math.floor(hsv.H * height);
+                    }
                 } else if (useAxis == "1-3") { // H-V
-                    x = Math.floor(hsv.H * width);
-                    y = Math.floor(hsv.V * height);
+                    if (reverse === "default") {
+                        x = Math.floor(hsv.H * width);
+                        y = Math.floor(hsv.V * height);
+                    } else { // V-H
+                        x = Math.floor(hsv.V * width);
+                        y = Math.floor(hsv.H * height);
+                    }
                 } else { // S-V
-                    x = Math.floor(hsv.S * width);
-                    y = Math.floor(hsv.V * height);
-                }
-
-                // 軸反転
-                if (reverse !== "default") {
-                    if (useAxis == "1-2") { // H-S → S-H
-                        [x, y] = [y, x];
-                    } else if (useAxis == "1-3") { // H-V → V-H
-                        [x, y] = [y, x];
-                    } else { // S-V → V-S
-                        [x, y] = [y, x];
+                    if (reverse === "default") {
+                        x = Math.floor(hsv.S * width);
+                        y = Math.floor(hsv.V * height);
+                    } else { // V-S
+                        x = Math.floor(hsv.V * width);
+                        y = Math.floor(hsv.S * height);
                     }
                 }
             }
