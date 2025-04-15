@@ -258,6 +258,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     x = Math.floor((rgb.g / 255) * width);
                     y = Math.floor((rgb.b / 255) * height);
                 }
+                // 軸反転
+                if (reverse !== "default") {
+                    [x, y] = [y, x];
+                }
             } else {
                 // HSV平面
                 if (useAxis == "1-2") { // H-S
