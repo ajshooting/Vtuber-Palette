@@ -282,9 +282,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
             }
-            if (reverse !== "default") {
-                [x, y] = [y, x];
-            }
 
             // プロットする点を描画
             ctx.beginPath();
