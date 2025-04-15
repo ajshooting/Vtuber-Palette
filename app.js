@@ -77,45 +77,40 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 } else {
-                    const h = (x / width) * 360;
-                    const s = (y / height);
-                    const V = 1; // 定数
-                    const a = 30; // 不透明度
-                    let rgb;
-                    if (useAxis == "1-2") {
-                        if (reverse == "default") {
-                            rgb = hsvToRgb(h, s, V);
-                        } else {
-                            rgb = hsvToRgb(s, h, V);
-                        }
-                        imageData.data[index] = rgb[0];
-                        imageData.data[index + 1] = rgb[1];
-                        imageData.data[index + 2] = rgb[2];
-                        imageData.data[index + 3] = a;
-                    } else if (useAxis == "1-3") {
-                        // h-vなら逆対数の逆..つまり対数をとる的な
-                        const a = 2
-                        const v = Math.log((y / height) * (Math.exp(a) - 1) + 1) / a;
-                        if (reverse == "default") {
-                            rgb = hsvToRgb(h, 0.5, v);
-                        } else {
-                            rgb = hsvToRgb(v, 0.5, h);
-                        }
-                        imageData.data[index] = rgb[0];
-                        imageData.data[index + 1] = rgb[2];
-                        imageData.data[index + 2] = rgb[1];
-                        imageData.data[index + 3] = a;
-                    } else {
-                        if (reverse == "default") {
-                            rgb = hsvToRgb(h, s, V);
-                        } else {
-                            rgb = hsvToRgb(s, h, V);
-                        }
-                        imageData.data[index] = rgb[2];
-                        imageData.data[index + 1] = rgb[0];
-                        imageData.data[index + 2] = rgb[1];
-                        imageData.data[index + 3] = a;
+                    // HSV平面
+                    let h, s, v;
+                    // 軸割り当て
+                    if (useAxis == "1-2") { // H-S
+                        h = (x / width) * 360;
+                        s = (y / height);
+                        v = 1;
+                    } else if (useAxis == "1-3") { // H-V
+                        h = (x / width) * 360;
+                        s = 1;
+                        v = (y / height);
+                    } else { // S-V
+                        h = 0;
+                        s = (x / width);
+                        v = (y / height);
                     }
+
+                    // 軸反転
+                    if (reverse !== "default") {
+                        if (useAxis == "1-2") { // H-S → S-H
+                            [h, s] = [s * 360, h / 360];
+                        } else if (useAxis == "1-3") { // H-V → V-H
+                            [h, v] = [v * 360, h / 360];
+                        } else { // S-V → V-S
+                            [s, v] = [v, s];
+                        }
+                    }
+
+                    // HSV→RGB
+                    let rgb = hsvToRgb(h, s, v);
+                    imageData.data[index] = rgb[0];
+                    imageData.data[index + 1] = rgb[1];
+                    imageData.data[index + 2] = rgb[2];
+                    imageData.data[index + 3] = 50;
                 }
             }
         }
@@ -264,17 +259,27 @@ document.addEventListener("DOMContentLoaded", function () {
                     y = Math.floor((rgb.b / 255) * height);
                 }
             } else {
-                if (useAxis = "1-2") {
+                // HSV平面
+                if (useAxis == "1-2") { // H-S
                     x = Math.floor(hsv.H * width);
                     y = Math.floor(hsv.S * height);
-                } else if (useAxis == "1-3") {
+                } else if (useAxis == "1-3") { // H-V
                     x = Math.floor(hsv.H * width);
-                    // h - v平面にするなら逆対数スケールにする
-                    const a = 4;
-                    y = Math.floor(Math.exp(hsv.V * a) / Math.exp(a) * height);
-                } else {
+                    y = Math.floor(hsv.V * height);
+                } else { // S-V
                     x = Math.floor(hsv.S * width);
                     y = Math.floor(hsv.V * height);
+                }
+
+                // 軸反転
+                if (reverse !== "default") {
+                    if (useAxis == "1-2") { // H-S → S-H
+                        [x, y] = [y, x];
+                    } else if (useAxis == "1-3") { // H-V → V-H
+                        [x, y] = [y, x];
+                    } else { // S-V → V-S
+                        [x, y] = [y, x];
+                    }
                 }
             }
             if (reverse !== "default") {
