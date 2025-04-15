@@ -10,7 +10,7 @@ response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
 
 # 表を抽出
-table = soup.find_all("table")[109]
+table = soup.find("table", attrs={"id": lambda x: x and "content_block_817" in x})
 rows = table.find_all("tr")
 data = []
 for row in rows:
