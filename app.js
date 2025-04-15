@@ -249,18 +249,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (colorSpace == "rgb") {
                 if (useAxis == "1-2") {
-                    x = Math.floor((rgb.r / 255) * width);
-                    y = Math.floor((rgb.g / 255) * height);
+                    if (reverse === "default") {
+                        x = Math.floor((rgb.r / 255) * width);
+                        y = Math.floor((rgb.g / 255) * height);
+                    } else { // reverse
+                        x = Math.floor((rgb.g / 255) * width);
+                        y = Math.floor((rgb.r / 255) * height);
+                    }
                 } else if (useAxis == "1-3") {
-                    x = Math.floor((rgb.r / 255) * width);
-                    y = Math.floor((rgb.b / 255) * height);
-                } else {
-                    x = Math.floor((rgb.g / 255) * width);
-                    y = Math.floor((rgb.b / 255) * height);
-                }
-                // 軸反転
-                if (reverse !== "default") {
-                    [x, y] = [y, x];
+                    if (reverse === "default") {
+                        x = Math.floor((rgb.r / 255) * width);
+                        y = Math.floor((rgb.b / 255) * height);
+                    } else { // reverse
+                        x = Math.floor((rgb.b / 255) * width);
+                        y = Math.floor((rgb.r / 255) * height);
+                    }
+                } else { // "2-3"
+                    if (reverse === "default") {
+                        x = Math.floor((rgb.g / 255) * width);
+                        y = Math.floor((rgb.b / 255) * height);
+                    } else { // reverse
+                        x = Math.floor((rgb.b / 255) * width);
+                        y = Math.floor((rgb.g / 255) * height);
+                    }
                 }
             } else {
                 // HSV平面
