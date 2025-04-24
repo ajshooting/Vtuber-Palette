@@ -9,16 +9,34 @@ url = "https://seesaawiki.jp/siroyoutuber/d/%c1%e1%b8%ab%c9%bd"
 response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
 
-# 表を抽出
-table = soup.find("table", attrs={"id": lambda x: x and "content_block_817" in x})
-rows = table.find_all("tr")
+# 「公式イメージカラー」セクションを探す
+headings = soup.find_all("h3")
+target_section = None
+for heading in headings:
+    if "公式イメージカラー" in heading.text:
+        target_section = heading.parent
+
+# セクションが見つかった場合、その中の表を探す
+table = None
+if target_section:
+    # セクションの親要素を取得し、その中から表を探す
+    section_container = target_section.parent
+    table = section_container.find("table", class_="filter sort")
+
+# 表が見つからない場合のフォールバック
+if not table:
+    table = soup.find("table", class_="filter sort")
+
+# 表のデータを抽出
 data = []
-for row in rows:
-    cols = row.find_all("td")
-    if len(cols) >= 2:
-        name = cols[0].text.strip()
-        color_code = cols[1].text.strip()
-        data.append([name, color_code])
+if table:
+    rows = table.find_all("tr")
+    for row in rows:
+        cols = row.find_all("td")
+        if len(cols) >= 2:
+            name = cols[0].text.strip()
+            color_code = cols[1].text.strip()
+            data.append([name, color_code])
 
 # 指定CSVファイルを開く
 csv_file = "colordict/どっとライブ.csv"
