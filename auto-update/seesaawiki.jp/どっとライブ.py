@@ -7,25 +7,25 @@ url = "https://seesaawiki.jp/siroyoutuber/d/%c1%e1%b8%ab%c9%bd"
 
 # ソース取得
 response = requests.get(url)
-soup = BeautifulSoup(response.content, "html.parser")
+response.encoding = response.apparent_encoding
+soup = BeautifulSoup(response.text, "html.parser")
 
-# 「公式イメージカラー」セクションを探す
-headings = soup.find_all("h3")
-target_section = None
-for heading in headings:
-    if "公式イメージカラー" in heading.text:
-        target_section = heading.parent
+# 「公式イメージカラー」のh3要素を特定
+target_h3 = None
+for h3 in soup.find_all("h3"):
+    if "公式イメージカラー" in h3.text:
+        target_h3 = h3
+        break
 
-# セクションが見つかった場合、その中の表を探す
+# h3が見つかった場合、その次にあるtableを探す
 table = None
-if target_section:
-    # セクションの親要素を取得し、その中から表を探す
-    section_container = target_section.parent
-    table = section_container.find("table", class_="filter sort")
+if target_h3:
+    table = target_h3.find_next("table")
 
-# 表が見つからない場合のフォールバック
-if not table:
-    table = soup.find("table", class_="filter sort")
+# h3が見つかった場合、その次にあるtableを探す
+table = None
+if target_h3:
+    table = target_h3.find_next("table")
 
 # 表のデータを抽出
 data = []
