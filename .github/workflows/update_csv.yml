@@ -27,9 +27,32 @@ jobs:
 
             - name: Run update scripts
               run: |
+                  echo "Starting script execution..."
+                  failed_scripts=()
                   for script in ./auto-update/*/*.py; do
-                      python "$script"
+                      echo "========================================="
+                      echo "Executing: $script"
+                      echo "========================================="
+                      if python "$script"; then
+                          echo "✅ SUCCESS: $script completed successfully"
+                      else
+                          echo "❌ FAILED: $script failed with exit code $?"
+                          failed_scripts+=("$script")
+                      fi
+                      echo ""
                   done
+
+                  if [ ${#failed_scripts[@]} -gt 0 ]; then
+                      echo "========================================="
+                      echo "SUMMARY: Failed scripts:"
+                      for script in "${failed_scripts[@]}"; do
+                          echo "  - $script"
+                      done
+                      echo "========================================="
+                      exit 1
+                  else
+                      echo "✅ All scripts completed successfully"
+                  fi
 
             - name: Commit and push changes
               run: |
