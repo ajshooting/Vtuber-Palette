@@ -8,10 +8,10 @@ url = "https://seesaawiki.jp/holostarstv/d/%c1%e1%b8%ab%c9%bd"
 
 # ソース取得
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 response = requests.get(url, headers=headers)
-response.encoding = "utf-8"
+response.encoding = response.apparent_encoding
 
 # レスポンス確認
 if response.status_code != 200:
@@ -19,20 +19,30 @@ if response.status_code != 200:
     print(f"Response: {response.text[:500]}...")
     sys.exit(1)
 
-soup = BeautifulSoup(response.content, "lxml")
+# html.parserを使用（lxmlの代わりに）
+soup = BeautifulSoup(response.text, "html.parser")
 
 # 表を抽出
 tables = soup.find_all("table")
 print(f"Found {len(tables)} tables")
 
-if len(tables) <= 9:
-    print(f"Error: Expected at least 10 tables, but found {len(tables)}")
-    print("Available tables:")
-    for i, tbl in enumerate(tables):
-        if hasattr(tbl, 'find_all'):
-            print(f"  Table {i}: {len(tbl.find_all('tr'))} rows")
+# 条件を緩和してデバッグ情報を追加
+if len(tables) == 0:
+    print("Error: No tables found on the page")
+    # ページの構造をデバッグ
+    print("Page title:", soup.title.string if soup.title else "No title")
+    print("Available h3 headers:")
+    for i, h3 in enumerate(soup.find_all("h3")[:5]):  # 最初の5個だけ表示
+        print(f"  H3 {i}: {h3.text.strip()}")
     sys.exit(1)
-table = tables[9]
+
+# テーブルが10個未満の場合は最後のテーブルを使用
+if len(tables) < 10:
+    print(f"Warning: Expected at least 10 tables, but found {len(tables)}")
+    print("Using the last available table")
+    table = tables[-1]  # 最後のテーブルを使用
+else:
+    table = tables[9]  # 10番目のテーブル（インデックス9）
 rows = table.find_all("tr")
 data = []
 for row in rows:
