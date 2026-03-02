@@ -10,23 +10,48 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
+import sys
+
 # ソース取得
-response = requests.get(url,headers=headers)
+try:
+    response = requests.get(url,headers=headers)
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    print(f"URLの取得中にエラーが発生しました: {e}")
+    sys.exit(0)
+
 soup = BeautifulSoup(response.content, "html.parser")
 
 
 # 表を抽出
-table = soup.find_all("table")[0]
+tables = soup.find_all("table")
+table = None
+for tbl in tables:
+    rows = tbl.find_all("tr")
+    if not rows: continue
+    
+    first_row = rows[0]
+    if first_row.find("th") or first_row.find("td"):
+        cols = first_row.find_all(["th", "td"])
+        first_row_text = "".join(c.text.strip() for c in cols)
+    else:
+        first_row_text = first_row.text.strip()
+    
+    if "名前" in first_row_text and ("背景色" in first_row_text or "カラー" in first_row_text):
+        table = tbl
+        break
+
+data = []
 if table:
     rows = table.find_all("tr")
-    data = []
     for row in rows:
         th = row.find("th")
         td = row.find("td")
         if th and td:
             header = th.text.strip()
             first_td = td.text.strip()
-            data.append([header, first_td])
+            if header and header != "名前":
+                data.append([header, first_td])
 else:
     print("Table not found")
 

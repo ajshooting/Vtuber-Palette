@@ -2,15 +2,45 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
+import sys
+
 # URL
 url = "https://vtuberinfo.net/774inc-membercolor/"
 
 # ソース取得
-response = requests.get(url)
+try:
+    response = requests.get(url)
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    print(f"URLの取得中にエラーが発生しました: {e}")
+    sys.exit(0)
+
 soup = BeautifulSoup(response.content, "html.parser")
 
 # 表を抽出
-table = soup.find("table")
+tables = soup.find_all("table")
+target_table = None
+
+for tbl in tables:
+    rows = tbl.find_all("tr")
+    if not rows: continue
+    
+    first_row = rows[0]
+    if first_row.find("th") or first_row.find("td"):
+        cols = first_row.find_all(["th", "td"])
+        first_row_text = "".join(c.text.strip() for c in cols)
+    else:
+        first_row_text = first_row.text.strip()
+    
+    if "タレント" in first_row_text and ("カラー" in first_row_text or "色" in first_row_text):
+        target_table = tbl
+        break
+
+if not target_table:
+    print("目的のテーブルが見つかりませんでした。処理をスキップします。")
+    sys.exit(0)
+
+table = target_table
 rows = table.find_all("tr")
 data = []
 for row in rows:
@@ -18,7 +48,8 @@ for row in rows:
     if len(cols) >= 2:
         name = cols[0].text.strip()
         color_code = cols[1].text.strip()
-        data.append([name, color_code])
+        if name and name != "タレント" and name != "名前":
+            data.append([name, color_code])
 
 # 指定CSVファイルを開く
 csv_file = "colordict/ななしいんく.csv"

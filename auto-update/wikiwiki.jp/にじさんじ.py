@@ -10,13 +10,29 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 }
 
+import sys
+
 # ソース取得
-response = requests.get(url,headers=headers)
+try:
+    response = requests.get(url,headers=headers)
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    print(f"URLの取得中にエラーが発生しました: {e}")
+    sys.exit(0)
+
 soup = BeautifulSoup(response.content, "html.parser")
 
 def updateNijisanji():
+    data = []
     # 表を抽出
-    table = soup.find_all("table")[0]
+    tables = soup.find_all("table")
+    table = None
+    for tbl in tables:
+        prev = tbl.find_previous(["h2", "h3", "h4", "h5", "b", "strong"])
+        if prev and "にじさんじ" in prev.text and "NIJISANJI" not in prev.text and "VirtuaReal" not in prev.text:
+            table = tbl
+            break
+
     if table:
         rows = table.find_all("tr")
         data = []
@@ -39,8 +55,16 @@ def updateNijisanji():
             if len(row) >= 2 and not row[0].startswith("#"):
                 existing_data.append([row[0], row[1]])
 
+    def normalize(text):
+        return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
+
+    existing_normalized = [normalize(row[0]) for row in existing_data]
+
     # 差分を確認し、存在しない名前とカラーコードを追加
-    new_entries = [entry for entry in data if entry not in existing_data]
+    new_entries = []
+    for entry in data:
+        if normalize(entry[0]) not in existing_normalized:
+            new_entries.append(entry)
 
     if new_entries:
         with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
@@ -53,8 +77,16 @@ def updateNijisanji():
 
 
 def updateVirtuaReal():
+    data = []
     # 表を抽出
-    table = soup.find_all("table")[1]
+    tables = soup.find_all("table")
+    table = None
+    for tbl in tables:
+        prev = tbl.find_previous(["h2", "h3", "h4", "h5", "b", "strong"])
+        if prev and "VirtuaReal" in prev.text:
+            table = tbl
+            break
+
     if table:
         rows = table.find_all("tr")
         data = []
@@ -77,8 +109,16 @@ def updateVirtuaReal():
             if len(row) >= 2 and not row[0].startswith("#"):
                 existing_data.append([row[0], row[1]])
 
+    def normalize(text):
+        return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
+
+    existing_normalized = [normalize(row[0]) for row in existing_data]
+
     # 差分を確認し、存在しない名前とカラーコードを追加
-    new_entries = [entry for entry in data if entry not in existing_data]
+    new_entries = []
+    for entry in data:
+        if normalize(entry[0]) not in existing_normalized:
+            new_entries.append(entry)
 
     if new_entries:
         with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
@@ -91,8 +131,16 @@ def updateVirtuaReal():
 
 
 def updateIN():
+    data = []
     # 表を抽出
-    table = soup.find_all("table")[2]
+    tables = soup.find_all("table")
+    table = None
+    for tbl in tables:
+        prev = tbl.find_previous(["h2", "h3", "h4", "h5", "b", "strong"])
+        if prev and "NIJISANJI IN" in prev.text:
+            table = tbl
+            break
+
     if table:
         rows = table.find_all("tr")
         data = []
@@ -115,8 +163,16 @@ def updateIN():
             if len(row) >= 2 and not row[0].startswith("#"):
                 existing_data.append([row[0], row[1]])
 
+    def normalize(text):
+        return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
+
+    existing_normalized = [normalize(row[0]) for row in existing_data]
+
     # 差分を確認し、存在しない名前とカラーコードを追加
-    new_entries = [entry for entry in data if entry not in existing_data]
+    new_entries = []
+    for entry in data:
+        if normalize(entry[0]) not in existing_normalized:
+            new_entries.append(entry)
 
     if new_entries:
         with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
@@ -129,8 +185,16 @@ def updateIN():
 
 
 def updateEN():
+    data = []
     # 表を抽出
-    table = soup.find_all("table")[3]
+    tables = soup.find_all("table")
+    table = None
+    for tbl in tables:
+        prev = tbl.find_previous(["h2", "h3", "h4", "h5", "b", "strong"])
+        if prev and "NIJISANJI EN" in prev.text:
+            table = tbl
+            break
+
     if table:
         rows = table.find_all("tr")
         data = []
@@ -153,8 +217,16 @@ def updateEN():
             if len(row) >= 2 and not row[0].startswith("#"):
                 existing_data.append([row[0], row[1]])
 
+    def normalize(text):
+        return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
+
+    existing_normalized = [normalize(row[0]) for row in existing_data]
+
     # 差分を確認し、存在しない名前とカラーコードを追加
-    new_entries = [entry for entry in data if entry not in existing_data]
+    new_entries = []
+    for entry in data:
+        if normalize(entry[0]) not in existing_normalized:
+            new_entries.append(entry)
 
     if new_entries:
         with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
