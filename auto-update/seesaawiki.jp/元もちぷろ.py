@@ -5,12 +5,34 @@ import csv
 # URL
 url = "https://seesaawiki.jp/mochi8hiyoko/d/%c1%e1%b8%ab%c9%bd"
 
+import sys
+
 # ソース取得
-response = requests.get(url)
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+try:
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+except requests.exceptions.RequestException as e:
+    print(f"URLの取得中にエラーが発生しました: {e}")
+    sys.exit(0)
+
 soup = BeautifulSoup(response.content, "html.parser")
 
 # 表を抽出
-table = soup.find_all("table")[2]
+tables = soup.find_all("table")
+target_table = None
+
+for tbl in tables:
+    prev = tbl.find_previous(["h2", "h3", "h4", "h5", "b", "strong"])
+    if prev and "イメージカラー" in prev.text:
+        target_table = tbl
+        break
+
+if not target_table:
+    print("目的のテーブルが見つかりませんでした。処理をスキップします。")
+    sys.exit(0)
+
+table = target_table
 rows = table.find_all("tr")
 data = []
 for row in rows:

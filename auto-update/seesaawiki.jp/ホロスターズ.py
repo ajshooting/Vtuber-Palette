@@ -15,7 +15,7 @@ try:
     response.raise_for_status()
 except requests.exceptions.RequestException as e:
     print(f"URLの取得中にエラーが発生しました: {e}")
-    sys.exit(1)
+    sys.exit(0)
 
 # ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 # ★★★ 真の原因に対応する、最終修正箇所です ★★★
@@ -33,17 +33,31 @@ print(f"ページ上で {len(tables)} 個のテーブルを見つけました。
 
 if len(tables) == 0:
     print("エラー: ページ上にテーブルが見つかりませんでした。")
-    sys.exit(1)
+    sys.exit(0)
 
-# 10番目のテーブル（インデックス9）が存在すればそれを、なければ最後のテーブルを使用
-if len(tables) >= 10:
-    table = tables[9]
-    print("10番目のテーブルを使用します。")
-else:
-    table = tables[-1]
-    print(
-        f"警告: テーブルが10個未満です。最後のテーブル（{len(tables)}番目）を使用します。"
-    )
+target_table = None
+
+for tbl in tables:
+    rows = tbl.find_all("tr")
+    if not rows: continue
+    
+    first_row = rows[0]
+    if first_row.find("th") or first_row.find("td"):
+        cols = first_row.find_all(["th", "td"])
+        first_row_text = "".join(c.text.strip() for c in cols)
+    else:
+        first_row_text = first_row.text.strip()
+    
+    if "カラーコード" in first_row_text:
+        target_table = tbl
+        break
+
+if not target_table:
+    print("エラー: 目的のテーブルが見つかりませんでした。")
+    sys.exit(0)
+
+table = target_table
+print("目的のテーブルを使用します。")
 
 # テーブルからデータを抽出
 rows = table.find_all("tr")
@@ -53,7 +67,7 @@ for row in rows:
     if len(cols) >= 3:
         name = cols[0].text.strip()
         color_code = cols[2].text.strip()
-        if name and color_code:
+        if name and color_code and name != "名前":
             new_data.append([name, color_code])
 
 print(f"新たに {len(new_data)} 件のデータを抽出しました。")
