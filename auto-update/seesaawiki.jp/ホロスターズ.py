@@ -77,25 +77,41 @@ output_dir = "colordict"
 csv_file = os.path.join(output_dir, "ホロスターズ.csv")
 os.makedirs(output_dir, exist_ok=True)
 
-existing_data = []
+all_rows = []
 try:
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if row and len(row) >= 2 and not row[0].startswith("#"):
-                existing_data.append([row[0], row[1]])
+        all_rows = list(csv.reader(file))
 except FileNotFoundError:
-    print(f"CSVファイル '{csv_file}' が存在しないため、新規に作成します。")
+    pass
 
-entries_to_add = [entry for entry in new_data if entry not in existing_data]
+existing_dict = {}
+for i, row in enumerate(all_rows):
+    if len(row) >= 2 and not row[0].startswith("#"):
+        existing_dict[row[0]] = i
 
-if entries_to_add:
-    print(f"{len(entries_to_add)} 件の新しいデータをCSVファイルに追記します。")
-    with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        if os.path.getsize(csv_file) > 0 if os.path.exists(csv_file) else False:
-            writer.writerow([])
-        writer.writerows(entries_to_add)
-    print("追記が完了しました。")
+new_entries = []
+updated = False
+
+for entry in new_data:
+    name, color_code = entry
+    if name in existing_dict:
+        idx = existing_dict[name]
+        existing_color = all_rows[idx][1].strip()
+        if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+            all_rows[idx][1] = color_code
+            updated = True
+    else:
+        new_entries.append(entry)
+
+if updated or new_entries:
+    if new_entries:
+        # 既存データがある場合は空行を挟む
+        if all_rows:
+            all_rows.append([])
+        all_rows.extend(new_entries)
+    with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+        csv.writer(file).writerows(all_rows)
+    print("CSVファイルの更新が完了しました。")
 else:
-    print("追加する新しいデータはありませんでした。")
+    print("追加・更新する新しいデータはありませんでした。")
+

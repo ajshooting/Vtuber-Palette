@@ -56,20 +56,33 @@ for row in rows:
 
 # 指定CSVファイルを開く
 csv_file = "colordict/VEE.csv"
-existing_data = []
+all_rows = []
 with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-    reader = csv.reader(file)
-    for row in reader:
-        if len(row) >= 2 and not row[0].startswith("#"):
-            existing_data.append([row[0], row[1]])
+    all_rows = list(csv.reader(file))
 
-# 差分を確認し、存在しない名前とカラーコードを追加
-new_entries = [entry for entry in data if entry not in existing_data]
+existing_dict = {}
+for i, row in enumerate(all_rows):
+    if len(row) >= 2 and not row[0].startswith("#"):
+        existing_dict[row[0]] = i
 
-if new_entries:
-    with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow([])
-        for entry in new_entries:
-            name, color_code = entry
-            writer.writerow([name, color_code])
+new_entries = []
+updated = False
+
+for entry in data:
+    name, color_code = entry
+    if name in existing_dict:
+        idx = existing_dict[name]
+        existing_color = all_rows[idx][1].strip()
+        if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+            all_rows[idx][1] = color_code
+            updated = True
+    else:
+        new_entries.append(entry)
+
+if updated or new_entries:
+    if new_entries:
+        if all_rows:
+            all_rows.append([])
+        all_rows.extend(new_entries)
+    with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+        csv.writer(file).writerows(all_rows)

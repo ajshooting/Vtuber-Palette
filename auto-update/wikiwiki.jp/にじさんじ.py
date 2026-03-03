@@ -48,31 +48,39 @@ def updateNijisanji():
 
     # 指定CSVファイルを開く
     csv_file = "colordict/にじさんじ.csv"
-    existing_data = []
+    all_rows = []
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) >= 2 and not row[0].startswith("#"):
-                existing_data.append([row[0], row[1]])
+        all_rows = list(csv.reader(file))
 
     def normalize(text):
         return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
 
-    existing_normalized = [normalize(row[0]) for row in existing_data]
+    existing_dict = {}
+    for i, row in enumerate(all_rows):
+        if len(row) >= 2 and not row[0].startswith("#"):
+            existing_dict[normalize(row[0])] = i
 
-    # 差分を確認し、存在しない名前とカラーコードを追加
     new_entries = []
+    updated = False
     for entry in data:
-        if normalize(entry[0]) not in existing_normalized:
+        name, color_code = entry
+        norm_name = normalize(name)
+        if norm_name in existing_dict:
+            idx = existing_dict[norm_name]
+            existing_color = all_rows[idx][1].strip()
+            if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+                all_rows[idx][1] = color_code
+                updated = True
+        else:
             new_entries.append(entry)
 
-    if new_entries:
-        with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow([])
-            for entry in new_entries:
-                name, color_code = entry
-                writer.writerow([name, color_code])
+    if updated or new_entries:
+        if new_entries:
+            if all_rows:
+                all_rows.append([])
+            all_rows.extend(new_entries)
+        with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+            csv.writer(file).writerows(all_rows)
 
 
 
@@ -102,31 +110,39 @@ def updateVirtuaReal():
 
     # 指定CSVファイルを開く
     csv_file = "colordict/VirtuaReal.csv"
-    existing_data = []
+    all_rows = []
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) >= 2 and not row[0].startswith("#"):
-                existing_data.append([row[0], row[1]])
+        all_rows = list(csv.reader(file))
 
     def normalize(text):
         return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
 
-    existing_normalized = [normalize(row[0]) for row in existing_data]
+    existing_dict = {}
+    for i, row in enumerate(all_rows):
+        if len(row) >= 2 and not row[0].startswith("#"):
+            existing_dict[normalize(row[0])] = i
 
-    # 差分を確認し、存在しない名前とカラーコードを追加
     new_entries = []
+    updated = False
     for entry in data:
-        if normalize(entry[0]) not in existing_normalized:
+        name, color_code = entry
+        norm_name = normalize(name)
+        if norm_name in existing_dict:
+            idx = existing_dict[norm_name]
+            existing_color = all_rows[idx][1].strip()
+            if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+                all_rows[idx][1] = color_code
+                updated = True
+        else:
             new_entries.append(entry)
 
-    if new_entries:
-        with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow([])
-            for entry in new_entries:
-                name, color_code = entry
-                writer.writerow([name, color_code])
+    if updated or new_entries:
+        if new_entries:
+            if all_rows:
+                all_rows.append([])
+            all_rows.extend(new_entries)
+        with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+            csv.writer(file).writerows(all_rows)
 
 
 
@@ -156,31 +172,39 @@ def updateIN():
 
     # 指定CSVファイルを開く
     csv_file = "colordict/NIJISANJI IN.csv"
-    existing_data = []
+    all_rows = []
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) >= 2 and not row[0].startswith("#"):
-                existing_data.append([row[0], row[1]])
+        all_rows = list(csv.reader(file))
 
     def normalize(text):
         return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
 
-    existing_normalized = [normalize(row[0]) for row in existing_data]
+    existing_dict = {}
+    for i, row in enumerate(all_rows):
+        if len(row) >= 2 and not row[0].startswith("#"):
+            existing_dict[normalize(row[0])] = i
 
-    # 差分を確認し、存在しない名前とカラーコードを追加
     new_entries = []
+    updated = False
     for entry in data:
-        if normalize(entry[0]) not in existing_normalized:
+        name, color_code = entry
+        norm_name = normalize(name)
+        if norm_name in existing_dict:
+            idx = existing_dict[norm_name]
+            existing_color = all_rows[idx][1].strip()
+            if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+                all_rows[idx][1] = color_code
+                updated = True
+        else:
             new_entries.append(entry)
 
-    if new_entries:
-        with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow([])
-            for entry in new_entries:
-                name, color_code = entry
-                writer.writerow([name, color_code])
+    if updated or new_entries:
+        if new_entries:
+            if all_rows:
+                all_rows.append([])
+            all_rows.extend(new_entries)
+        with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+            csv.writer(file).writerows(all_rows)
 
 
 
@@ -210,31 +234,39 @@ def updateEN():
 
     # 指定CSVファイルを開く
     csv_file = "colordict/NIJISANJI EN.csv"
-    existing_data = []
+    all_rows = []
     with open(csv_file, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if len(row) >= 2 and not row[0].startswith("#"):
-                existing_data.append([row[0], row[1]])
+        all_rows = list(csv.reader(file))
 
     def normalize(text):
         return text.replace("（", "(").replace("）", ")").replace(" ", "").replace("　", "")
 
-    existing_normalized = [normalize(row[0]) for row in existing_data]
+    existing_dict = {}
+    for i, row in enumerate(all_rows):
+        if len(row) >= 2 and not row[0].startswith("#"):
+            existing_dict[normalize(row[0])] = i
 
-    # 差分を確認し、存在しない名前とカラーコードを追加
     new_entries = []
+    updated = False
     for entry in data:
-        if normalize(entry[0]) not in existing_normalized:
+        name, color_code = entry
+        norm_name = normalize(name)
+        if norm_name in existing_dict:
+            idx = existing_dict[norm_name]
+            existing_color = all_rows[idx][1].strip()
+            if (not existing_color or existing_color == "---") and color_code and color_code != "---":
+                all_rows[idx][1] = color_code
+                updated = True
+        else:
             new_entries.append(entry)
 
-    if new_entries:
-        with open(csv_file, mode="a", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow([])
-            for entry in new_entries:
-                name, color_code = entry
-                writer.writerow([name, color_code])
+    if updated or new_entries:
+        if new_entries:
+            if all_rows:
+                all_rows.append([])
+            all_rows.extend(new_entries)
+        with open(csv_file, mode="w", newline="", encoding="utf-8") as file:
+            csv.writer(file).writerows(all_rows)
 
 
 updateNijisanji()
